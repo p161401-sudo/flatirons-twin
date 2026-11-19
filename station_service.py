@@ -454,7 +454,7 @@ def main():
     store.import_history()
     store.import_research_forecasts('raw')
     store.import_research_forecasts('corrected')
-    server = ThreadingHTTPServer(('127.0.0.1', args.port), Handler)
+    server = ThreadingHTTPServer((os.environ.get('BIND_HOST', '127.0.0.1'), args.port), Handler)
     server.store = store
 
     def worker():
