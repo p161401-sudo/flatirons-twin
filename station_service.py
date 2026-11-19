@@ -408,7 +408,8 @@ class Handler(SimpleHTTPRequestHandler):
             self.send_json({'error': str(error)}, 400)
 
     def do_HEAD(self):
-        self.send_error(405, 'Use GET for this local service')
+        self.method = 'GET'
+        return self.do_GET()
 
     def do_POST(self):
         origin = self.headers.get('Origin')
