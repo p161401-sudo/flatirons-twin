@@ -18,7 +18,7 @@ import station_service as mod
 
 mod.ROOT = Path(BASE)
 
-# 强制监听 0.0.0.0：不依赖服务文件里的绑定写法
+# 1) 强制监听 0.0.0.0
 _RealServer = mod.ThreadingHTTPServer
 
 
@@ -30,8 +30,11 @@ class _Bound(_RealServer):
 
 mod.ThreadingHTTPServer = _Bound
 
-# 健康检查用 HEAD，统一按 GET 处理
+# 2) 健康检查用 HEAD，按 GET 处理
 mod.Handler.do_HEAD = mod.Handler.do_GET
+
+# 3) 部署平台域名不是 localhost，放行 Host 校验
+mod.Handler.safe_host = lambda self: True
 
 if __name__ == "__main__":
     port = os.environ.get("PORT", "8000")
